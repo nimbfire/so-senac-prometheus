@@ -1,0 +1,10 @@
+
+
+
+objetivos
+  criar um container rodando prometheus
+  criar varios containers rodandos exporters
+
+
+  criar um container rodando grafana
+    configurar o grafana pra ler do prometheus
