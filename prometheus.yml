@@ -1,7 +1,15 @@
 global:
-  scrape_interval: 15s # How often to scrape targets
+  scrape_interval: 5s # Sped up to 5s so you see data instantly
 
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
+
+  - job_name: 'fake-go-app'
+    static_configs:
+      - targets: ['fake-app-go:9102']
+
+  - job_name: 'my-custom-python-app'
+    static_configs:
+      - targets: ['my-custom-app:8000'] # Matches service name and exposed port

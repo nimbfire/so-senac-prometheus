@@ -11,6 +11,47 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
+    networks:
+      - monitoring
+
+  # Fake App 1: Simulates a Go application with basic HTTP metrics
+  fake-app-go:
+    image: prom/statsd-exporter:latest
+    container_name: fake-app-go
+    restart: unless-stopped
+    ports:
+      - "9102:9102"
+    networks:
+      - monitoring
+
+  # Your custom small app
+  my-custom-app:
+    build: .                  # Looks for the Dockerfile in the current directory
+    container_name: custom-app
+    restart: unless-stopped
+    # Notice: No 'ports' mapped to your computer! It is totally isolated.
+    ports:
+      - "9123:8000"
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - monitoring
+
 
 volumes:
   prometheus_data:
+  grafana_data:
+  
+networks:
+  monitoring:
+    driver: bridge
+
